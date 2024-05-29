@@ -9,7 +9,7 @@ This is a ruby script for generating graphs with https://oss.oetiker.ch/rrdtool/
 = Usage
 `$ ./rrd2html.rb configfile.toml`
 
-This will generate `<img/><br/>` tags.
+This will generate `<img/>` tags.
 
 If no argument is defined it will try to open `/etc/rrd2html.toml`.
 

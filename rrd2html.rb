@@ -17,4 +17,4 @@ def render graph
     `
 end
 
-puts $conf[:graphs].map { |graph| "<img src=\"data:image;base64,#{render graph}\"/><br/>"}
+puts $conf[:graphs].map { |graph| "<img src=\"data:image;base64,#{render graph}\"/>" }
