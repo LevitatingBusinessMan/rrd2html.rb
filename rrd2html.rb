@@ -4,7 +4,7 @@ require 'base64'
 $conf = Tomlrb.load_file ARGV[0] || "/etc/rrd2html.toml", symbolize_keys: true
 
 $genline = ->(l, i) {"DEF:d#{i}=#{File.join($conf[:datadir], l[:file])}:#{l[:val] || $conf[:val] || 'value:AVERAGE'} \
-LINE#{i+1}:d#{i}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name].inspect}"}
+LINE:d#{i}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name].inspect}"}
 
 def render graph
     Base64.encode64`
