@@ -13,6 +13,8 @@ This will generate `<img/><br/>` tags.
 
 If no argument is defined it will try to open `/etc/rrd2html.toml`.
 
+== rrd2html.slim
+
 There is also the `.slim` html templating file, `rrd2html.slim`.
 This is configured for CGI, and supports refreshing the page automatically.
 You can execute this with:
@@ -92,4 +94,4 @@ cgi.assign     = (
 )
 ```
 
-With this you could for copy `rrd2html.slim` to `/srv/http/cgi/rrd2html.slim`, and set`/etc/rrd2html.toml` and it should just work.
+With this you could for copy `rrd2html.slim` to `/srv/http/cgi/rrd2html.slim`, and set `/etc/rrd2html.toml` and it should just work.
