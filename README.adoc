@@ -1,0 +1,2 @@
+= rdd2html.rb
+This is a ruby script for generating rrd graphs with rrdtool using a toml configuration, and then embedding them into html using base64.
