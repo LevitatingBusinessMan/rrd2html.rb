@@ -11,14 +11,13 @@ $genline = ->(l, i) {"DEF:d#{i}=#{File.join($conf[:datadir], l[:file])}:#{l[:val
 LINE#{i+1}:d#{i}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name].inspect}"}
 
 def render graph
-    `
+    Base64.encode64`
         rrdtool graph - \
         --start=end-#{graph[:span] || $conf[:span] || "1h"} \
         --end=now \
         #{graph[:title] ? "--title=#{graph[:title].inspect}" : ''} \
         #{graph[:lines].each_with_index.map(&$genline).join(" ")} \
         --width=#{(graph[:dimensions] || $conf[:dimensions] || [300,100]).join ' --height='}} \
-        | base64 -w0
     `
 end
 

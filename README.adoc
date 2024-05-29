@@ -4,7 +4,6 @@ This is a ruby script for generating graphs with https://oss.oetiker.ch/rrdtool/
 
 = Requirements
 * https://github.com/fbernier/tomlrb[tomlrb^] gem
-* https://www.gnu.org/software/coreutils/manual/html_node/base64-invocation.html#base64-invocation[base64^] command
 * https://rrdroot.org[rrdroot^] command
 
 = Usage
