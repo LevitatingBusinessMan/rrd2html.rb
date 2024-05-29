@@ -1,2 +1,50 @@
 = rrd2html.rb
+
 This is a ruby script for generating rrd graphs with rrdtool using a toml configuration, and then embedding them into html using base64.
+
+= Configuration
+A sample graph for plotting cpu usage: 
+```toml
+[[graphs]]
+title = "CPU Usage - 1 Hour"
+dimensions = [300, 100]
+span = "1h"
+lines = [
+    { file = "/var/lib/collectd/localhost/cpu-0/cpu-user.rrd",   name="CPU User",   val="value:AVERAGE", color="#FF0000" },
+    { file = "/var/lib/collectd/localhost/cpu-0/cpu-system.rrd", name="CPU System", val="value:AVERAGE", color="#00FF00" },
+    { file = "/var/lib/collectd/localhost/cpu-0/cpu-idle.rrd",   name="CPU Idle",   val="value:AVERAGE", color="#0000FF" }
+]
+```
+
+However, we can reduce the complexity by moving default values out of the graphs table.
+Here we only overwrite the color of the idle data:
+```toml
+# prefix for the .rrd file paths
+datadir="/var/lib/collectd/localhost"
+
+# defaults for all graphs
+dimensions = [300, 100]
+span = "1h"
+color="#FF0000" 
+
+[[graphs]]
+title = "CPU Usage - 1 Hour"
+lines = [
+    { file = "cpu-0/cpu-user.rrd",   name="CPU User", },
+    { file = "cpu-0/cpu-system.rrd", name="CPU System" },
+    { file = "cpu-0/cpu-idle.rrd",   name="CPU Idle", color="#0000FF" }
+]
+```
+
+You could omit even those defaults because there is also defaults defined in the script.
+So a barebones configuration only needs lines containing a file and a name.
+```toml
+datadir="/var/lib/collectd/localhost"
+
+[[graphs]]
+lines = [
+    { file = "cpu-0/cpu-user.rrd",   name="CPU User", },
+    { file = "cpu-0/cpu-system.rrd", name="CPU System" },
+    { file = "cpu-0/cpu-idle.rrd",   name="CPU Idle" }
+]
+```
