@@ -3,22 +3,22 @@ ruby:
     require 'base64'
     require 'cgi'
     puts "Content-Type: text/html\n\n"
-    conf = Tomlrb.load_file ENV["CONF"] || "/etc/rrd2html.toml", symbolize_keys: true
+    $conf = Tomlrb.load_file ENV["CONF"] || "/etc/rrd2html.toml", symbolize_keys: true
     cgi = CGI.new
 
     $genline = ->(l, i) {"\
-        DEF:d#{i}=#{File.join($conf[:datadir], l[:file])}:#{l[:val] || $conf[:val] || 'value:AVERAGE'} \
-        #{"CDEF:d#{i}i=d#{i},-1,*" if l[:inv]} \
-        LINE:d#{i}#{"i" if l[:inv]}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name].inspect} \
+    DEF:d#{i}=#{File.join($conf[:datadir], l[:file])}:#{l[:val] || $conf[:val] || 'value:AVERAGE'} \
+    #{"CDEF:d#{i}i=d#{i},-1,*" if l[:inv]} \
+    LINE:d#{i}#{"i" if l[:inv]}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name].inspect} \
     "}
 
     $render = ->(graph) { Base64.encode64 `
         rrdtool graph - \
-        --start=end-#{graph[:span] || (cgi["span"] if cgi.include? "span") || conf[:span] || "1h"} \
+        --start=end-#{graph[:span] || (cgi["span"] if cgi.include? "span") || $conf[:span] || "1h"} \
         --end=now \
-        #{graph[:title] ? "--title=#{graph[:title].inspect}" : ''} \
+        #{"--title=#{graph[:title].inspect}" if graph[:title]} \
         #{graph[:lines].each_with_index.map(&$genline).join(" ")} \
-        --width=#{(graph[:dimensions] || conf[:dimensions] || [300,100]).join ' --height='}} \
+        --width=#{(graph[:dimensions] || $conf[:dimensions] || [300,100]).join ' --height='}} \
     ` }
 
 doctype html
@@ -44,5 +44,5 @@ body
         button type="submit" go
     br
     .graphs
-        - conf[:graphs].each do |graph|
+        - $conf[:graphs].each do |graph|
             img.graph src="data:image;base64,#{$render.(graph)}"/
