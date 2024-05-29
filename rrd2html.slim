@@ -23,7 +23,7 @@ ruby:
 doctype html
 head
 body 
-    h1 a href="https://github.com/LevitatingBusinessMan/rrd2html.rb" rrd2html.slim
+    h1: a href="https://github.com/LevitatingBusinessMan/rrd2html.rb" rrd2html.slim
     - $conf[:graphs].each do |graph|
         img src="data:image;base64,#{$render.(graph)}"/
         br/
