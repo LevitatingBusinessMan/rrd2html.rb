@@ -3,10 +3,6 @@ require "tomlrb"
 require 'base64'
 $conf = Tomlrb.load_file ARGV[0] || "/etc/rrd2html.toml", symbolize_keys: true
 
-def file datafile
-    File.join($conf[:datadir], datafile)
-end
-
 $genline = ->(l, i) {"DEF:d#{i}=#{File.join($conf[:datadir], l[:file])}:#{l[:val] || $conf[:val] || 'value:AVERAGE'} \
 LINE#{i+1}:d#{i}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name].inspect}"}
 

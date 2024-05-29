@@ -17,7 +17,7 @@ There is also the `.slim` html templating file.
 This returns an entire html document, and is useful for extending the output.
 You can execute this with:
 
-`$ slimrb rrd2html.slim configfile.toml`
+`$ CONF=configfile.toml slimrb rrd2html.slim`
 
 If these scripts don't have the exact behaviour that you seek I encourage you to edit them.
 
