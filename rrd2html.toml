@@ -1,9 +1,9 @@
 datadir = "/var/lib/collectd/localhost"
-dimensions = [300, 100]
 
 # defaults
 span = "1h"
 color = "#FF0000"
+dimensions = [300, 100]
 
 [[graphs]]
 title = "Memory Usage"

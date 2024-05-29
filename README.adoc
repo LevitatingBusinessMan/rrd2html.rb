@@ -74,7 +74,6 @@ lines = [
 
 = CGI configuration
 If you want to serve these files via webserver directly I recommend using https://redmine.lighttpd.net/projects/lighttpd/wiki[lighttpd^].
-Lighttpd won't care if your script outputs response headers.
 
 Take this example config:
 ```

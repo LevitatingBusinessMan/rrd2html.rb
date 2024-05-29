@@ -2,6 +2,7 @@ ruby:
     require 'tomlrb'
     require 'base64'
     require 'cgi'
+    puts "Content-Type: text/html\n\n"
     conf = Tomlrb.load_file ENV["CONF"] || "/etc/rrd2html.toml", symbolize_keys: true
     cgi = CGI.new
 
@@ -20,7 +21,8 @@ ruby:
 doctype html
 head
     css:
-        label, select, .graph { margin-right: 5px }
+        label, select { margin-right: 5px }
+        .graphs { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
     javascript:
         let timeout = Number((new URLSearchParams(window.location.search)).get("interval"));
         if (timeout != 0) setTimeout(location.reload.bind(location), timeout * 1000);
@@ -38,6 +40,6 @@ body
                 option value=secs selected=(secs.to_s == cgi["interval"]) #{name}
         button type="submit" go
     br
-    .graphs style="display: flex"
+    .graphs
         - conf[:graphs].each do |graph|
             img.graph src="data:image;base64,#{$render.(graph)}"/
