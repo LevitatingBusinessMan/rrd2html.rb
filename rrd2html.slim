@@ -1,7 +1,7 @@
 ruby:
     require "tomlrb"
     require 'base64'
-    $conf = Tomlrb.load_file ARGV[1] || "rdd2html.toml", symbolize_keys: true
+    $conf = Tomlrb.load_file ARGV[1] || "rrd2html.toml", symbolize_keys: true
 
     def file datafile
         File.join($conf[:datadir], datafile)
