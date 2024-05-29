@@ -2,6 +2,21 @@
 
 This is a ruby script for generating rrd graphs with rrdtool using a toml configuration, and then embedding them into html using base64.
 
+= Usage
+`$ ./rrd2html.rb configfile.toml`
+
+This will return `<img/><br/>` tags.
+
+If no argument is defined it will try to open `/etc/rrd2html.toml`.
+
+There is also the `.slim` html templating file.
+This returns an entire html document, and is useful for extending the output.
+You can execute this with:
+
+`$ slimrb rrd2html.slim configfile.toml`
+
+If these scripts don't have the exact behaviour that you seek I encourage you to edit them.
+
 = Configuration
 A sample graph for plotting cpu usage: 
 ```toml
@@ -48,3 +63,27 @@ lines = [
     { file = "cpu-0/cpu-idle.rrd",   name="CPU Idle" }
 ]
 ```
+
+= CGI configuration
+If you want to serve these files via webserver directly I recommend using lighttpd[https://redmine.lighttpd.net/projects/lighttpd/wiki^].
+Lighttpd won't care if your script outputs response headers.
+
+Take this example config:
+```
+server.modules = (
+	"mod_cgi"
+)
+
+server.username		= "http"
+server.groupname	= "http"
+server.document-root	= "/srv/http/cgi"
+dir-listing.activate	= "enable"
+index-file.names	= ( "index.html" )
+
+cgi.assign     = (
+    ".rb" => "/usr/bin/ruby",
+    ".slim" => "/usr/bin/slimrb",
+)
+```
+
+With this you could for copy `rrd2html.slim` to `/srv/http/cgi/rrd2html.slim`, and set`/etc/rrd2html.toml` and it should just work.
