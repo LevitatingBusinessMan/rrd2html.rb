@@ -2,6 +2,11 @@
 
 This is a ruby script for generating rrd graphs with rrdtool using a toml configuration, and then embedding them into html using base64.
 
+= Requirements
+* tomlrb[https://github.com/fbernier/tomlrb] gem
+* base64[https://www.gnu.org/software/coreutils/manual/html_node/base64-invocation.html#base64-invocation] command
+* rrdroot[https://rrdroot.org]
+
 = Usage
 `$ ./rrd2html.rb configfile.toml`
 
