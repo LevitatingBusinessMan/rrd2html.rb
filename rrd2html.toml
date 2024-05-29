@@ -6,14 +6,14 @@ span = "1h"
 color = "#FF0000"
 
 [[graphs]]
-title = "Memory Usage - 1 Hour"
+title = "Memory Usage"
 lines = [
     { file = "memory/memory-used.rrd", name="Memory Used" },
     { file = "memory/memory-free.rrd", name="Memory Free", color="#00FF00" }
 ]
 
 [[graphs]]
-title = "CPU System Usage - 1 Hour"
+title = "CPU System Usage"
 lines = [
     { file = "cpu-0/cpu-system.rrd", name="CPU 0" },
     { file = "cpu-1/cpu-system.rrd", name="CPU 1", color="#00FF00" }

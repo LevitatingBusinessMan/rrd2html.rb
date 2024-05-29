@@ -9,17 +9,19 @@ This is a ruby script for generating graphs with https://oss.oetiker.ch/rrdtool/
 = Usage
 `$ ./rrd2html.rb configfile.toml`
 
-This will return `<img/><br/>` tags.
+This will generate `<img/><br/>` tags.
 
 If no argument is defined it will try to open `/etc/rrd2html.toml`.
 
-There is also the `.slim` html templating file.
-This returns an entire html document, and is useful for extending the output.
+There is also the `.slim` html templating file, `rrd2html.slim`.
+This is configured for CGI, and supports refreshing the page automatically.
 You can execute this with:
 
 `$ CONF=configfile.toml slimrb rrd2html.slim`
 
 If these scripts don't have the exact behaviour that you seek I encourage you to edit them.
+
+image::screenshot.png[rrd2html.slim]
 
 = Configuration
 A sample graph for plotting cpu usage: 

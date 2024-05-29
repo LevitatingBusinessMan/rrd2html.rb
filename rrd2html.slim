@@ -1,24 +1,44 @@
 ruby:
-    require "tomlrb"
+    require 'tomlrb'
     require 'base64'
-    $conf = Tomlrb.load_file ENV["CONF"] || "/etc/rrd2html.toml", symbolize_keys: true
+    require 'cgi'
+    conf = Tomlrb.load_file ENV["CONF"] || "/etc/rrd2html.toml", symbolize_keys: true
+    cgi = CGI.new
 
-    $genline = ->(l, i) {"DEF:d#{i}=#{File.join($conf[:datadir], l[:file])}:#{l[:val] || $conf[:val] || 'value:AVERAGE'} \
-    LINE#{i+1}:d#{i}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name].inspect}"}
+    $genline = ->(l, i) {"DEF:d#{i}=#{File.join(conf[:datadir], l[:file])}:#{l[:val] || conf[:val] || 'value:AVERAGE'} \
+    LINE#{i+1}:d#{i}#{l[:color] || conf[:color] || '#FF0000'}:#{l[:name].inspect}"}
 
     $render = ->(graph) { Base64.encode64 `
         rrdtool graph - \
-        --start=end-#{graph[:span] || $conf[:span] || "1h"} \
+        --start=end-#{graph[:span] || (cgi["span"] if cgi.include? "span") || conf[:span] || "1h"} \
         --end=now \
         #{graph[:title] ? "--title=#{graph[:title].inspect}" : ''} \
         #{graph[:lines].each_with_index.map(&$genline).join(" ")} \
-        --width=#{(graph[:dimensions] || $conf[:dimensions] || [300,100]).join ' --height='}} \
+        --width=#{(graph[:dimensions] || conf[:dimensions] || [300,100]).join ' --height='}} \
     ` }
 
 doctype html
 head
+    css:
+        label, select, .graph { margin-right: 5px }
+    javascript:
+        let timeout = Number((new URLSearchParams(window.location.search)).get("interval"));
+        if (timeout != 0) setTimeout(location.reload.bind(location), timeout * 1000);
 body 
     h1: a href="https://github.com/LevitatingBusinessMan/rrd2html.rb" rrd2html.slim
-    - $conf[:graphs].each do |graph|
-        img src="data:image;base64,#{$render.(graph)}"/
-        br/
+    form
+        label Span:
+        select name="span"
+            - for opt in ["1h", "6h", "1day", "1week", "1month"]
+                option value=opt selected=(opt == cgi["span"]) #{opt}
+                label span
+        label Interval:
+        select name="interval"
+            - for secs, name in [[0, "none"], [5, "5 seconds"], [60, "1 minute"], [500, "5 minutes"]]
+                option value=secs selected=(secs.to_s == cgi["interval"]) #{name}
+        button type="submit" go
+    br
+    .graphs style="display: flex"
+        - conf[:graphs].each do |graph|
+            img.graph src="data:image;base64,#{$render.(graph)}"/
+            br/

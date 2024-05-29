@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require "tomlrb"
+require 'tomlrb'
 require 'base64'
 $conf = Tomlrb.load_file ARGV[0] || "/etc/rrd2html.toml", symbolize_keys: true
 
