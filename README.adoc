@@ -1,11 +1,11 @@
-= rrd2html.rb
+= https://github.com/LevitatingBusinessMan/rrd2html.rb[rrd2html.rb]
 
-This is a ruby script for generating rrd graphs with rrdtool using a toml configuration, and then embedding them into html using base64.
+This is a ruby script for generating graphs with https://oss.oetiker.ch/rrdtool/[rrdtool] using a toml configuration, and then embedding them into html using base64.
 
 = Requirements
-* tomlrb[https://github.com/fbernier/tomlrb] gem
-* base64[https://www.gnu.org/software/coreutils/manual/html_node/base64-invocation.html#base64-invocation] command
-* rrdroot[https://rrdroot.org]
+* https://github.com/fbernier/tomlrb[tomlrb^] gem
+* https://www.gnu.org/software/coreutils/manual/html_node/base64-invocation.html#base64-invocation[base64^] command
+* https://rrdroot.org[rrdroot^] command
 
 = Usage
 `$ ./rrd2html.rb configfile.toml`
@@ -70,7 +70,7 @@ lines = [
 ```
 
 = CGI configuration
-If you want to serve these files via webserver directly I recommend using lighttpd[https://redmine.lighttpd.net/projects/lighttpd/wiki^].
+If you want to serve these files via webserver directly I recommend using https://redmine.lighttpd.net/projects/lighttpd/wiki[lighttpd^].
 Lighttpd won't care if your script outputs response headers.
 
 Take this example config:
