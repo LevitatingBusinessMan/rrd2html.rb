@@ -12,14 +12,16 @@ ruby:
     LINE:d#{i}#{"i" if l[:inv]}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name].inspect} \
     "}
 
-    $render = ->(graph) { Base64.encode64 `
-        rrdtool graph - \
-        --start=end-#{graph[:span] || (cgi["span"] if cgi.include? "span") || $conf[:span] || "1h"} \
-        --end=now \
-        #{"--title=#{graph[:title].inspect}" if graph[:title]} \
-        #{graph[:lines].each_with_index.map(&$genline).join(" ")} \
-        --width=#{(graph[:dimensions] || $conf[:dimensions] || [300,100]).join ' --height='}} \
-    ` }
+    def self.render graph
+        Base64.encode64`
+            rrdtool graph - \
+            --start=end-#{graph[:span] || $conf[:span] || "1h"} \
+            --end=now \
+            #{"--title=#{graph[:title].inspect}" if graph[:title]} \
+            #{graph[:lines].each_with_index.map(&$genline).join(" ")} \
+            --width=#{(graph[:dimensions] || $conf[:dimensions] || [300,100]).join ' --height='}} \
+        `
+    end
 
 doctype html
 head
@@ -45,4 +47,4 @@ body
     br
     .graphs
         - $conf[:graphs].each do |graph|
-            img.graph src="data:image;base64,#{$render.(graph)}"/
+            img.graph src="data:image;base64,#{render graph}"/
