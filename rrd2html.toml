@@ -18,3 +18,10 @@ lines = [
     { file = "cpu-0/cpu-system.rrd", name="CPU 0" },
     { file = "cpu-1/cpu-system.rrd", name="CPU 1", color="#00FF00" }
 ]
+
+[[graphs]]
+title = "Interface eth0 Packets"
+lines = [
+	{ file = "interface-eth0/if_packets.rrd",  name="tx packets",   color="#0000FF", val="tx:AVERAGE" },
+	{ file = "interface-eth0/if_packets.rrd",  name="rx packets",   color="#FF0000", val="rx:AVERAGE", inv = true },
+]
