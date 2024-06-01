@@ -1,10 +1,12 @@
-ruby:
+ruby: 
+    require 'cgi'
+    cgi = CGI.new
+    puts "Content-Type: text/html\n\n"
+    s_time = Time.now
+
     require 'tomlrb'
     require 'base64'
-    require 'cgi'
-    puts "Content-Type: text/html\n\n"
     $conf = Tomlrb.load_file ENV["CONF"] || "/etc/rrd2html.toml", symbolize_keys: true
-    cgi = CGI.new
 
     $genline = ->(l, i) {"\
     DEF:d#{i}=#{File.join($conf[:datadir], l[:file])}:#{l[:val] || $conf[:val] || 'value:AVERAGE'} \
@@ -13,7 +15,7 @@ ruby:
     "}
 
     def self.render graph
-        Base64.encode64`
+        Base64.encode64 `
             rrdtool graph - \
             --start=end-#{graph[:span] || $conf[:span] || "1h"} \
             --end=now \
@@ -48,3 +50,5 @@ body
     .graphs
         - $conf[:graphs].each do |graph|
             img.graph src="data:image;base64,#{render graph}"/
+
+    p = "#{Time.now} in #{(Time.now - s_time).round 2}s"

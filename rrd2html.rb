@@ -10,7 +10,7 @@ LINE:d#{i}#{"i" if l[:inv]}#{l[:color] || $conf[:color] || '#FF0000'}:#{l[:name]
 "}
 
 def render graph
-    Base64.encode64`
+    Base64.encode64 `
         rrdtool graph - \
         --start=end-#{graph[:span] || $conf[:span] || "1h"} \
         --end=now \
