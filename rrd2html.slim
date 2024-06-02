@@ -1,6 +1,6 @@
 ruby: 
     require 'cgi'
-    cgi = CGI.new
+    $cgi = CGI.new
     puts "Content-Type: text/html\n\n"
     s_time = Time.now
 
@@ -17,7 +17,7 @@ ruby:
     def self.render graph
         Base64.encode64 `
             rrdtool graph - \
-            --start=end-#{graph[:span] || $conf[:span] || "1h"} \
+            --start=end-#{graph[:span] || ($cgi["span"] if $cgi.include? "span") || $conf[:span] || "1h"} \
             --end=now \
             #{"--title=#{graph[:title].inspect}" if graph[:title]} \
             #{graph[:lines].each_with_index.map(&$genline).join(" ")} \
@@ -39,12 +39,12 @@ body
         label Span:
         select name="span"
             - for opt in ["1h", "6h", "1day", "1week", "1month"]
-                option value=opt selected=(opt == cgi["span"]) #{opt}
+                option value=opt selected=(opt == $cgi["span"]) #{opt}
                 label span
         label Interval:
         select name="interval"
             - for secs, name in [[0, "none"], [5, "5 seconds"], [60, "1 minute"], [500, "5 minutes"]]
-                option value=secs selected=(secs.to_s == cgi["interval"]) #{name}
+                option value=secs selected=(secs.to_s == $cgi["interval"]) #{name}
         button type="submit" go
     br
     .graphs
