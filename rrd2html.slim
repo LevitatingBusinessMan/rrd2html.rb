@@ -1,7 +1,7 @@
-ruby: 
+ruby:
     require 'cgi'
     $cgi = CGI.new
-    puts "Content-Type: text/html\n\n"
+    puts $cgi.http_header "text/html"
     s_time = Time.now
 
     require 'tomlrb'
